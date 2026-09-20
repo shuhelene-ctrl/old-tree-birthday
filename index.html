@@ -187,13 +187,16 @@
 <body>
 
   <h1>Un petit message pour toi !</h1>
-  <div class="hint">🦔 Clique sur le hérisson 💌</div>
+  <div class="hint">🦔 Clique sur la carte du hérisson 💌</div>
 
   <div class="hedgehog-wrapper" id="hedgehog">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 420" width="100%" height="100%">
       <defs>
         <filter id="shadow" x="-10%" y="-10%" width="120%" height="120%">
           <feDropShadow dx="0" dy="8" stdDeviation="6" flood-color="#3d2319" flood-opacity="0.2"/>
+        </filter>
+        <filter id="cardShadow" x="-20%" y="-20%" width="140%" height="140%">
+          <feDropShadow dx="0" dy="4" stdDeviation="4" flood-color="#3d2319" flood-opacity="0.15"/>
         </filter>
         <linearGradient id="spikeGrad" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stop-color="#734a3a"/>
@@ -284,15 +287,20 @@
         <!-- Sourire -->
         <path d="M 193,193 Q 200,200 207,193" fill="none" stroke="#2b170e" stroke-width="4" stroke-linecap="round"/>
 
-        <!-- Pattes Avant -->
-        <g>
-          <path d="M 145,218 C 130,218 135,243 155,243 C 170,243 165,218 145,218 Z" fill="#f2d7c0" stroke="#2b170e" stroke-width="5"/>
-          <path d="M 142,230 Q 150,228 148,240" fill="none" stroke="#2b170e" stroke-width="3.5" stroke-linecap="round"/>
-          <path d="M 152,231 Q 158,228 157,241" fill="none" stroke="#2b170e" stroke-width="3.5" stroke-linecap="round"/>
+        <!-- La Carte tenue entre les pattes -->
+        <g filter="url(#cardShadow)">
+          <rect x="125" y="205" width="150" height="95" rx="10" fill="#fffbf7" stroke="#e2b49a" stroke-width="3.5" transform="rotate(-2, 200, 252)"/>
+          <text x="200" y="242" font-size="20" text-anchor="middle" fill="#5d3a29" font-weight="bold">Pour toi !</text>
+          <text x="200" y="272" font-size="22" text-anchor="middle">💌✨</text>
+        </g>
 
-          <path d="M 255,218 C 270,218 265,243 245,243 C 230,243 235,218 255,218 Z" fill="#f2d7c0" stroke="#2b170e" stroke-width="5"/>
-          <path d="M 258,230 Q 250,228 252,240" fill="none" stroke="#2b170e" stroke-width="3.5" stroke-linecap="round"/>
-          <path d="M 248,231 Q 242,228 243,241" fill="none" stroke="#2b170e" stroke-width="3.5" stroke-linecap="round"/>
+        <!-- Pattes Avant (qui recouvrent les bords de la carte) -->
+        <g>
+          <path d="M 130,220 C 115,220 120,248 142,248 C 155,248 150,220 130,220 Z" fill="#f2d7c0" stroke="#2b170e" stroke-width="4.5"/>
+          <path d="M 132,232 Q 138,230 137,243" fill="none" stroke="#2b170e" stroke-width="3" stroke-linecap="round"/>
+
+          <path d="M 270,220 C 285,220 280,248 258,248 C 245,248 250,220 270,220 Z" fill="#f2d7c0" stroke="#2b170e" stroke-width="4.5"/>
+          <path d="M 268,232 Q 262,230 263,243" fill="none" stroke="#2b170e" stroke-width="3" stroke-linecap="round"/>
         </g>
 
         <!-- Pattes Arrière (Coussinets) -->
