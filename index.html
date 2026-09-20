@@ -15,7 +15,7 @@
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      background: #090611; /* Fond très sombre au départ */
+      background: #090611;
       font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
       overflow: hidden;
       position: relative;
@@ -27,7 +27,7 @@
       background: radial-gradient(circle at center, #fffbf7 0%, #f7ebe1 100%);
     }
 
-    /* --- Effet Lampe de Poche (Noir absolu) --- */
+    /* --- Effet Lampe de Poche --- */
     .flashlight-overlay {
       position: absolute;
       top: 0; left: 0;
@@ -42,7 +42,7 @@
       opacity: 0;
     }
 
-    /* --- Guirlandes lumineuses --- */
+    /* --- Guirlandes --- */
     .garland {
       position: absolute;
       top: -10px;
@@ -71,24 +71,20 @@
     .flag:nth-child(3n) { border-top-color: #00b4d8; }
     .flag:nth-child(4n) { border-top-color: #70e000; }
 
-    /* --- Ampoules VRAIMENT cachées --- */
+    /* --- Ampoules Cachées --- */
     .bulb-target {
       position: absolute;
-      width: 60px;
-      height: 60px;
+      width: 60px; height: 60px;
       border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       font-size: 28px;
       cursor: pointer;
-      z-index: 5; /* Sous la lampe de poche mais cliquable */
-      opacity: 0; /* Totalement invisible par défaut */
+      z-index: 5;
+      opacity: 0;
       transition: opacity 0.2s ease, transform 0.2s ease;
       filter: grayscale(100%) brightness(0.7);
     }
 
-    /* L'ampoule devient visible UNIQUEMENT sous le faisceau de la lampe */
     .bulb-target.in-flashlight {
       opacity: 1;
       filter: grayscale(50%) brightness(1);
@@ -110,11 +106,31 @@
       100% { transform: scale(1.15); }
     }
 
-    /* Positions plus éloignées et réparties */
     #bulb1 { top: 15%; left: 8%; }
     #bulb2 { top: 22%; right: 10%; }
     #bulb3 { bottom: 15%; left: 12%; }
     #bulb4 { bottom: 22%; right: 8%; }
+
+    /* --- MINI-JEU: Cadeaux Volants --- */
+    .gift-item {
+      position: absolute;
+      font-size: 45px;
+      cursor: pointer;
+      z-index: 25;
+      animation: floatGift 4s linear infinite;
+      transition: transform 0.2s ease, opacity 0.3s ease;
+      filter: drop-shadow(0 8px 12px rgba(0,0,0,0.15));
+    }
+
+    .gift-item:hover {
+      transform: scale(1.25) rotate(10deg);
+    }
+
+    @keyframes floatGift {
+      0% { transform: translateY(110vh) rotate(0deg); }
+      50% { transform: translateY(50vh) rotate(180deg); }
+      100% { transform: translateY(-20vh) rotate(360deg); }
+    }
 
     /* --- Titres --- */
     h1 {
@@ -147,7 +163,7 @@
       color: #8c5a43;
     }
 
-    /* --- Étincelles d'arrière-plan --- */
+    /* --- Arrière-plan Étoiles --- */
     .bg-sparkles {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -215,8 +231,7 @@
 
     .candle {
       position: relative;
-      width: 20px;
-      height: 60px;
+      width: 20px; height: 60px;
       background: repeating-linear-gradient(45deg, #ff8fa3, #ff8fa3 10px, #ffffff 10px, #ffffff 20px);
       border-radius: 6px;
       box-shadow: 0 3px 8px rgba(0,0,0,0.15);
@@ -290,7 +305,7 @@
       margin-top: -4px; z-index: 0;
     }
 
-    /* --- Hérisson (Caché au départ) --- */
+    /* --- Hérisson --- */
     .hedgehog-wrapper {
       position: relative;
       width: min(85vw, 320px);
@@ -300,10 +315,7 @@
       z-index: 1; opacity: 0; pointer-events: none; transform: scale(0.5);
     }
 
-    .hedgehog-wrapper.visible {
-      opacity: 1; pointer-events: auto; transform: scale(1);
-    }
-
+    .hedgehog-wrapper.visible { opacity: 1; pointer-events: auto; transform: scale(1); }
     .hedgehog-wrapper.visible:hover { transform: scale(1.06) translateY(-6px); }
     .hedgehog-wrapper.zoom-forward { transform: scale(1.45) translateY(20px) !important; }
 
@@ -318,7 +330,7 @@
     @keyframes earWiggleRight { 0%, 88%, 100% { transform: rotate(0deg); } 93% { transform: rotate(7deg); } }
     @keyframes pulse { 0% { transform: scale(1); opacity: 0.85; } 100% { transform: scale(1.05); opacity: 1; } }
 
-    /* --- Carte Pop-up --- */
+    /* --- Pop-up Carte --- */
     .card-overlay {
       position: fixed;
       top: 0; left: 0; width: 100vw; height: 100vh;
@@ -363,22 +375,25 @@
 </head>
 <body>
 
-  <!-- Superposition lampe de poche -->
+  <!-- Superposition Lampe -->
   <div class="flashlight-overlay" id="flashlight"></div>
 
-  <!-- Guirlande lumineuse cachée -->
+  <!-- Guirlande -->
   <div class="garland">
     <div class="flag"></div><div class="flag"></div><div class="flag"></div>
     <div class="flag"></div><div class="flag"></div><div class="flag"></div><div class="flag"></div>
   </div>
 
-  <!-- 4 Ampoules totalement cachées -->
+  <!-- 4 Ampoules -->
   <div class="bulb-target" id="bulb1">💡</div>
   <div class="bulb-target" id="bulb2">💡</div>
   <div class="bulb-target" id="bulb3">💡</div>
   <div class="bulb-target" id="bulb4">💡</div>
 
-  <!-- Arrière-plan étincelles -->
+  <!-- Conteneur pour les Cadeaux Volants -->
+  <div id="giftsContainer"></div>
+
+  <!-- Étincelles -->
   <div class="bg-sparkles" id="sparklesContainer"></div>
 
   <h1 id="mainTitle">Oups, il fait noir ! 🕯️</h1>
@@ -520,9 +535,10 @@
     const mainTitle = document.getElementById('mainTitle');
     const hintText = document.getElementById('hintText');
     const cakeContainer = document.getElementById('cakeContainer');
+    const giftsContainer = document.getElementById('giftsContainer');
     let litCount = 0;
 
-    // --- Suivi de la Lampe + Révélation au survol ---
+    // --- Suivi de la Lampe ---
     function updateFlashlight(e) {
       const x = e.clientX || (e.touches && e.touches[0].clientX);
       const y = e.clientY || (e.touches && e.touches[0].clientY);
@@ -531,14 +547,11 @@
         flashlight.style.setProperty('--x', x + 'px');
         flashlight.style.setProperty('--y', y + 'px');
 
-        // Vérifier si une ampoule est dans le rayon de la lampe (110px)
         bulbs.forEach(bulb => {
           if (bulb.classList.contains('lit')) return;
-          
           const rect = bulb.getBoundingClientRect();
           const bulbX = rect.left + rect.width / 2;
           const bulbY = rect.top + rect.height / 2;
-          
           const dist = Math.hypot(x - bulbX, y - bulbY);
           
           if (dist < 110) {
@@ -553,7 +566,7 @@
     window.addEventListener('mousemove', updateFlashlight);
     window.addEventListener('touchmove', updateFlashlight);
 
-    // --- Clic sur l'ampoule ---
+    // --- Clic Ampoule ---
     bulbs.forEach(bulb => {
       const handleLightUp = (e) => {
         e.stopPropagation();
@@ -567,14 +580,8 @@
               document.body.classList.add('light-on');
               bulbs.forEach(b => b.style.display = 'none');
               
-              mainTitle.innerText = "Fais un vœu ! 🎂";
-              hintText.innerText = "Clique sur les bougies pour les souffler !";
-              
-              cakeContainer.classList.add('show');
-
-              if (typeof confetti === 'function') {
-                confetti({ particleCount: 50, spread: 50, origin: { y: 0.5 } });
-              }
+              // Passage au Mini-Jeu des Cadeaux
+              startGiftGame();
             }, 500);
           }
         }
@@ -584,7 +591,66 @@
       bulb.addEventListener('touchstart', handleLightUp);
     });
 
-    // Étincelles
+    // --- MINI-JEU : Attraper les cadeaux ---
+    let giftsCaught = 0;
+    const totalGiftsNeeded = 3;
+    let giftInterval;
+
+    function startGiftGame() {
+      mainTitle.innerText = "Chasse aux Cadeaux ! 🎁";
+      hintText.innerHTML = `Attrape <b><span id="giftCount">0</span>/${totalGiftsNeeded}</b> cadeaux volants !`;
+
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 40, spread: 50, origin: { y: 0.5 } });
+      }
+
+      giftInterval = setInterval(spawnGift, 800);
+    }
+
+    function spawnGift() {
+      if (giftsCaught >= totalGiftsNeeded) return;
+
+      const gift = document.createElement('div');
+      gift.classList.add('gift-item');
+      gift.innerText = ['🎁', '🎈', '🎀', '🎉'][Math.floor(Math.random() * 4)];
+      gift.style.left = (Math.random() * 80 + 10) + 'vw';
+      gift.style.animationDuration = (Math.random() * 2 + 3) + 's';
+
+      gift.addEventListener('click', () => {
+        giftsCaught++;
+        document.getElementById('giftCount').innerText = giftsCaught;
+
+        if (typeof confetti === 'function') {
+          confetti({ particleCount: 25, spread: 40, origin: { x: gift.offsetLeft / window.innerWidth, y: gift.offsetTop / window.innerHeight } });
+        }
+
+        gift.remove();
+
+        if (giftsCaught >= totalGiftsNeeded) {
+          clearInterval(giftInterval);
+          document.querySelectorAll('.gift-item').forEach(g => g.remove());
+          
+          setTimeout(showCakeStep, 600);
+        }
+      });
+
+      giftsContainer.appendChild(gift);
+
+      // Auto-suppression si sorti de l'écran
+      setTimeout(() => { gift.remove(); }, 5000);
+    }
+
+    function showCakeStep() {
+      mainTitle.innerText = "Fais un vœu ! 🎂";
+      hintText.innerText = "Clique sur les bougies pour les souffler !";
+      cakeContainer.classList.add('show');
+
+      if (typeof confetti === 'function') {
+        confetti({ particleCount: 60, spread: 60, origin: { y: 0.5 } });
+      }
+    }
+
+    // Étincelles de fond
     const sparklesContainer = document.getElementById('sparklesContainer');
     const sparkleSymbols = ['✨', '⭐', '🌟', '✦', '✧'];
 
@@ -601,7 +667,7 @@
     }
     setInterval(createSparkle, 350);
 
-    // --- Extinction des Bougies ---
+    // --- Bougies ---
     const flames = document.querySelectorAll('.flame');
     const hedgehog = document.getElementById('hedgehog');
     let flamesOut = 0;
