@@ -619,8 +619,8 @@
     let giftInterval;
 
     function startGiftGame() {
-      mainTitle.innerText = "Chasse aux Cadeaux ! 🎁";
-      hintText.innerHTML = `Attrape <b><span id="giftCount">0</span>/${totalGiftsNeeded}</b> VRAIS cadeaux 🎁 (attention aux pièges !)`;
+      mainTitle.innerText = "Gift hunt ! 🎁";
+      hintText.innerHTML = `Catch <b><span id="giftCount">0</span>/${totalGiftsNeeded}</b> the REAL gift 🎁`;
 
       if (typeof confetti === 'function') {
         confetti({ particleCount: 40, spread: 50, origin: { y: 0.5 } });
