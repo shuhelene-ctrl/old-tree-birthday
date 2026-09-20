@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title> Happy Birthday Mia !</title>
+  <title>Happy Birthday Mia !</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
   <style>
     * { box-sizing: border-box; }
@@ -21,7 +21,7 @@
       position: relative;
     }
 
-    /* --- Arrière-plan d'étincelles magiques --- */
+    /* --- Arrière-plan d'étincelles animées --- */
     .bg-sparkles {
       position: absolute;
       top: 0;
@@ -56,7 +56,7 @@
 
     h1 {
       color: #5d3a29;
-      font-size: 26px;
+      font-size: 28px;
       margin-bottom: 6px;
       text-align: center;
       font-weight: 800;
@@ -66,19 +66,19 @@
 
     .hint-text {
       color: #8c5a43;
-      font-size: 15px;
-      margin-bottom: 25px;
+      font-size: 16px;
+      margin-bottom: 20px;
       font-weight: 600;
       animation: pulse 1.6s infinite alternate;
       z-index: 1;
       text-align: center;
     }
 
-    /* --- Zone du Gâteau d'anniversaire --- */
+    /* --- Nouveau Gâteau Agrandit & Décoré --- */
     .cake-container {
       position: relative;
-      width: 220px;
-      height: 200px;
+      width: 290px;
+      height: 300px;
       display: flex;
       flex-direction: column;
       align-items: center;
@@ -95,48 +95,47 @@
       position: absolute;
     }
 
-    /* Bougies */
+    /* Bougies agrandies */
     .candles-row {
       display: flex;
-      gap: 30px;
-      margin-bottom: -5px;
-      z-index: 3;
+      gap: 38px;
+      margin-bottom: -6px;
+      z-index: 4;
     }
 
     .candle {
       position: relative;
-      width: 16px;
-      height: 45px;
-      background: repeating-linear-gradient(45deg, #f1a7a6, #f1a7a6 8px, #ffffff 8px, #ffffff 16px);
-      border-radius: 4px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      width: 20px;
+      height: 60px;
+      background: repeating-linear-gradient(45deg, #ff8fa3, #ff8fa3 10px, #ffffff 10px, #ffffff 20px);
+      border-radius: 6px;
+      box-shadow: 0 3px 8px rgba(0,0,0,0.15);
+    }
+
+    .candle::before {
+      content: '';
+      position: absolute;
+      top: -10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 3px;
+      height: 10px;
+      background: #555;
     }
 
     .flame {
       position: absolute;
-      top: -22px;
+      top: -30px;
       left: 50%;
       transform: translateX(-50%);
-      width: 14px;
-      height: 22px;
-      background: orange;
+      width: 18px;
+      height: 28px;
+      background: radial-gradient(ellipse at bottom, #ffea00 0%, #ff7b00 60%, transparent 100%);
       border-radius: 50% 50% 20% 20%;
-      box-shadow: 0 0 12px #ff8c00;
-      animation: flicker 0.6s infinite alternate;
+      box-shadow: 0 0 18px #ff9d00, 0 0 30px #ffea00;
+      animation: flicker 0.5s infinite alternate;
       cursor: pointer;
       transition: transform 0.2s ease, opacity 0.3s ease;
-    }
-
-    .flame::after {
-      content: '';
-      position: absolute;
-      bottom: 2px;
-      left: 50%;
-      transform: translateX(-50%);
-      width: 6px;
-      height: 10px;
-      background: yellow;
-      border-radius: 50%;
     }
 
     .flame.off {
@@ -146,30 +145,92 @@
     }
 
     @keyframes flicker {
-      0% { transform: translateX(-50%) scale(1) rotate(-2deg); }
-      100% { transform: translateX(-50%) scale(1.1) rotate(2deg); }
+      0% { transform: translateX(-50%) scale(1) rotate(-3deg); }
+      100% { transform: translateX(-50%) scale(1.15) rotate(3deg); }
     }
 
-    /* Structure du gâteau */
-    .cake-layer-top {
-      width: 160px;
-      height: 50px;
-      background: #f7a8b8;
-      border-radius: 12px 12px 4px 4px;
-      border-bottom: 6px solid #e88698;
-      box-shadow: inset 0 6px 0 #ffc2cd;
+    /* Étages du gâteau */
+    .cake-layer {
+      position: relative;
+      border-radius: 16px 16px 12px 12px;
+      box-shadow: 0 8px 18px rgba(93, 58, 41, 0.15);
+      overflow: hidden;
     }
 
-    .cake-layer-bottom {
-      width: 200px;
+    /* Glaçage dégoulinant */
+    .drips {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 18px;
+      background: #fff0f3;
+      border-radius: 0 0 10px 10px;
+      box-shadow: 0 3px 0 rgba(0,0,0,0.05);
+    }
+
+    .cake-top {
+      width: 170px;
+      height: 55px;
+      background: #ffb7c5;
+      z-index: 3;
+      border-bottom: 5px solid #f796ab;
+    }
+
+    .cake-middle {
+      width: 220px;
       height: 65px;
-      background: #7e4a35;
-      border-radius: 8px 8px 16px 16px;
-      border-top: 6px solid #f2c49b;
-      box-shadow: 0 10px 20px rgba(93, 58, 41, 0.15);
+      background: #f7cad0;
+      z-index: 2;
+      margin-top: -6px;
+      border-bottom: 5px solid #e89eb0;
     }
 
-    /* --- Container du Hérisson Vectoriel Animé --- */
+    .cake-bottom {
+      width: 270px;
+      height: 75px;
+      background: #7b432b;
+      z-index: 1;
+      margin-top: -6px;
+      border-top: 6px solid #ffb7c5;
+      border-bottom: 6px solid #5a2e1c;
+    }
+
+    /* Pépites décoratives */
+    .sprinkles {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+      pointer-events: none;
+    }
+
+    .sprinkle {
+      position: absolute;
+      width: 8px;
+      height: 4px;
+      border-radius: 2px;
+    }
+
+    .s1 { top: 25px; left: 30px; background: #ff477e; transform: rotate(15deg); }
+    .s2 { top: 35px; left: 80px; background: #ffb703; transform: rotate(-20deg); }
+    .s3 { top: 20px; left: 130px; background: #70e000; transform: rotate(45deg); }
+    .s4 { top: 30px; left: 50px; background: #00b4d8; transform: rotate(-10deg); }
+    .s5 { top: 40px; left: 180px; background: #ff477e; transform: rotate(30deg); }
+
+    /* Plat du gâteau */
+    .plate {
+      width: 300px;
+      height: 16px;
+      background: #e2e8f0;
+      border-radius: 10px;
+      box-shadow: 0 10px 20px rgba(0,0,0,0.12);
+      margin-top: -4px;
+      z-index: 0;
+    }
+
+    /* --- Container du Hérisson --- */
     .hedgehog-wrapper {
       position: relative;
       width: min(85vw, 320px);
@@ -337,15 +398,42 @@
   <h1 id="mainTitle">Fais un vœu ! 🎂</h1>
   <div class="hint-text" id="hintText">Clique sur les bougies pour les souffler !</div>
 
-  <!-- Jeu du Gâteau -->
+  <!-- Grand Gâteau Décoré -->
   <div class="cake-container" id="cakeContainer">
     <div class="candles-row">
       <div class="candle"><div class="flame"></div></div>
       <div class="candle"><div class="flame"></div></div>
       <div class="candle"><div class="flame"></div></div>
     </div>
-    <div class="cake-layer-top"></div>
-    <div class="cake-layer-bottom"></div>
+    
+    <!-- Étage Haut -->
+    <div class="cake-layer cake-top">
+      <div class="drips"></div>
+      <div class="sprinkles">
+        <div class="sprinkle s1"></div>
+        <div class="sprinkle s2"></div>
+      </div>
+    </div>
+
+    <!-- Étage Milieu -->
+    <div class="cake-layer cake-middle">
+      <div class="drips"></div>
+      <div class="sprinkles">
+        <div class="sprinkle s3"></div>
+        <div class="sprinkle s4"></div>
+      </div>
+    </div>
+
+    <!-- Étage Bas -->
+    <div class="cake-layer cake-bottom">
+      <div class="sprinkles">
+        <div class="sprinkle s1"></div>
+        <div class="sprinkle s5"></div>
+      </div>
+    </div>
+
+    <!-- Plat -->
+    <div class="plate"></div>
   </div>
 
   <!-- Hérisson (Caché au départ) -->
@@ -440,7 +528,7 @@
 
         <g filter="url(#cardShadow)">
           <rect x="125" y="205" width="150" height="95" rx="10" fill="#fffbf7" stroke="#e2b49a" stroke-width="3.5" transform="rotate(-2, 200, 252)"/>
-          <text x="200" y="242" font-size="20" text-anchor="middle" fill="#5d3a29" font-weight="bold"> For you !</text>
+          <text x="200" y="242" font-size="20" text-anchor="middle" fill="#5d3a29" font-weight="bold">For you !</text>
           <text x="200" y="272" font-size="22" text-anchor="middle">💌</text>
         </g>
 
@@ -524,7 +612,7 @@
           if (flamesOut === flames.length) {
             setTimeout(() => {
               cakeContainer.classList.add('hidden');
-              mainTitle.innerText = " Someone has a message for you !";
+              mainTitle.innerText = "Someone has a message for you !";
               hintText.innerText = "Clique sur le hérisson pour ouvrir la carte !";
               hedgehog.classList.add('visible');
 
