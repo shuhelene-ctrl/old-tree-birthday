@@ -46,12 +46,8 @@
         transform: translateY(0) scale(0.8) rotate(0deg);
         opacity: 0;
       }
-      10% {
-        opacity: 0.6;
-      }
-      90% {
-        opacity: 0.6;
-      }
+      10% { opacity: 0.6; }
+      90% { opacity: 0.6; }
       100% {
         transform: translateY(-115vh) scale(1.2) rotate(360deg);
         opacity: 0;
@@ -60,20 +56,76 @@
 
     h1 {
       color: #5d3a29;
-      font-size: 28px;
+      font-size: 26px;
       margin-bottom: 6px;
       text-align: center;
       font-weight: 800;
       z-index: 1;
+      padding: 0 10px;
     }
 
-    .hint {
+    .hint-text {
       color: #8c5a43;
       font-size: 15px;
-      margin-bottom: 20px;
+      margin-bottom: 25px;
       font-weight: 600;
       animation: pulse 1.6s infinite alternate;
       z-index: 1;
+      text-align: center;
+    }
+
+    /* --- Zone de jeu : Tas de feuilles --- */
+    .leaves-game-container {
+      display: flex;
+      gap: 20px;
+      justify-content: center;
+      align-items: center;
+      z-index: 2;
+      transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    .leaves-game-container.hidden {
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.8);
+      position: absolute;
+    }
+
+    .leaf-pile {
+      width: min(26vw, 100px);
+      height: min(26vw, 100px);
+      background: #e08b4c;
+      border-radius: 50% 50% 40% 40%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 38px;
+      cursor: pointer;
+      box-shadow: 0 8px 15px rgba(93, 58, 41, 0.15);
+      border: 3px solid #b86228;
+      transition: transform 0.2s ease, background 0.3s ease;
+      user-select: none;
+    }
+
+    .leaf-pile:hover {
+      transform: scale(1.1) rotate(3deg);
+      background: #d47837;
+    }
+
+    .leaf-pile.shake {
+      animation: shake 0.4s ease-in-out;
+    }
+
+    .leaf-pile.found {
+      transform: scale(0) rotate(180deg);
+      opacity: 0;
+      transition: all 0.5s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-8px) rotate(-5deg); }
+      40%, 80% { transform: translateX(8px) rotate(5deg); }
     }
 
     /* --- Container du Hérisson Vectoriel Animé --- */
@@ -82,12 +134,21 @@
       width: min(85vw, 320px);
       height: min(85vw, 336px);
       cursor: pointer;
-      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1);
+      transition: transform 0.6s cubic-bezier(0.25, 1, 0.5, 1), opacity 0.5s ease;
       will-change: transform;
       z-index: 1;
+      opacity: 0;
+      pointer-events: none;
+      transform: scale(0.5);
     }
 
-    .hedgehog-wrapper:hover {
+    .hedgehog-wrapper.visible {
+      opacity: 1;
+      pointer-events: auto;
+      transform: scale(1);
+    }
+
+    .hedgehog-wrapper.visible:hover {
       transform: scale(1.06) translateY(-6px);
     }
 
@@ -236,8 +297,17 @@
   <!-- Arrière-plan de cœurs animés -->
   <div class="bg-hearts" id="heartsContainer"></div>
 
-  <h1> Someone has a message for you !</h1>
+  <h1 id="mainTitle">Quelqu'un se cache ici... 🍂</h1>
+  <div class="hint-text" id="hintText">Fouille dans les feuilles pour le trouver !</div>
 
+  <!-- Jeu des tas de feuilles -->
+  <div class="leaves-game-container" id="leavesContainer">
+    <div class="leaf-pile" data-pile="0">🍂</div>
+    <div class="leaf-pile" data-pile="1">🍁</div>
+    <div class="leaf-pile" data-pile="2">🍂</div>
+  </div>
+
+  <!-- Hérisson (Caché au départ) -->
   <div class="hedgehog-wrapper" id="hedgehog">
     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 420" width="100%" height="100%">
       <defs>
@@ -343,7 +413,7 @@
           <text x="200" y="272" font-size="22" text-anchor="middle">💌</text>
         </g>
 
-        <!-- Pattes Avant (qui recouvrent les bords de la carte) -->
+        <!-- Pattes Avant -->
         <g>
           <path d="M 130,220 C 115,220 120,248 142,248 C 155,248 150,220 130,220 Z" fill="#f2d7c0" stroke="#2b170e" stroke-width="4.5"/>
           <path d="M 132,232 Q 138,230 137,243" fill="none" stroke="#2b170e" stroke-width="3" stroke-linecap="round"/>
@@ -405,15 +475,49 @@
       
       heartsContainer.appendChild(heart);
 
-      setTimeout(() => {
-        heart.remove();
-      }, 9000);
+      setTimeout(() => { heart.remove(); }, 9000);
     }
-
     setInterval(createHeart, 450);
 
-    // Événements du Hérisson et Pop-up
+    // --- Logique du jeu Cache-Cache ---
+    const leavesContainer = document.getElementById('leavesContainer');
+    const piles = document.querySelectorAll('.leaf-pile');
+    const mainTitle = document.getElementById('mainTitle');
+    const hintText = document.getElementById('hintText');
     const hedgehog = document.getElementById('hedgehog');
+
+    // Choisir aléatoirement quelle pile cache le hérisson (0, 1 ou 2)
+    const winningPileIndex = Math.floor(Math.random() * 3);
+
+    piles.forEach(pile => {
+      pile.addEventListener('click', () => {
+        const index = parseInt(pile.getAttribute('data-pile'));
+
+        if (index === winningPileIndex) {
+          // Découverte du hérisson !
+          pile.classList.add('found');
+          
+          setTimeout(() => {
+            leavesContainer.classList.add('hidden');
+            mainTitle.innerText = " Someone has a message for you !";
+            hintText.innerText = "Clique sur le hérisson pour ouvrir la carte !";
+            hedgehog.classList.add('visible');
+
+            if (typeof confetti === 'function') {
+              confetti({ particleCount: 50, spread: 50, origin: { y: 0.7 } });
+            }
+          }, 300);
+
+        } else {
+          // Faux tas : secousse + changement de texte amusant
+          pile.classList.add('shake');
+          hintText.innerText = "Raté ! Rien ici... Essaie un autre tas ! 🍂";
+          setTimeout(() => pile.classList.remove('shake'), 400);
+        }
+      });
+    });
+
+    // Événements du Hérisson et Pop-up
     const cardOverlay = document.getElementById('cardOverlay');
     const closeBtn = document.getElementById('closeBtn');
 
