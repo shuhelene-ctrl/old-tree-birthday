@@ -39,21 +39,14 @@
     /* --- Conteneur et Animation du Hérisson --- */
     .hedgehog-wrapper {
       position: relative;
-      width: min(85vw, 320px);
-      height: min(85vw, 320px);
+      width: min(85vw, 300px);
+      height: min(85vw, 300px);
       cursor: pointer;
       display: flex;
       align-items: center;
       justify-content: center;
       transition: transform 0.8s cubic-bezier(0.25, 1, 0.5, 1);
       will-change: transform;
-    }
-
-    .hedgehog-img {
-      width: 100%;
-      height: 100%;
-      object-fit: contain;
-      pointer-events: none;
     }
 
     /* Rotation pendant qu'il roule */
@@ -167,11 +160,49 @@
 <body>
 
   <h1>Un petit message pour toi !</h1>
-  <div class="hint">🦔 Clique sur le hérisson 💌</div>
+  <div class="hint">🦔 Clique sur le hérisson ♥</div>
 
   <div class="hedgehog-wrapper" id="hedgehog">
-    <!-- Image d'origine du hérisson -->
-    <img src="https://i.ibb.co/3YvC5qQ/hedgehog.png" alt="Hérisson" class="hedgehog-img">
+    <!-- SVG exact de ton hérisson d'origine -->
+    <svg viewBox="0 0 300 300" width="100%" height="100%">
+      <!-- Piquants (contour brun) -->
+      <path d="M 150,20 C 70,20 20,70 20,150 C 20,230 70,280 150,280 C 230,280 280,230 280,150 C 280,70 230,20 150,20 Z" fill="#5c3a21" stroke="#2b160a" stroke-width="8" stroke-linejoin="round"/>
+      
+      <!-- Petits piquants sur le bord -->
+      <path d="M 70,35 L 60,20 M 110,25 L 105,10 M 150,22 L 150,5 M 190,25 L 195,10 M 230,35 L 240,20 M 265,70 L 280,60 M 275,110 L 290,105 M 275,190 L 290,195 M 265,230 L 280,240 M 230,265 L 240,280 M 190,275 L 195,290 M 150,278 L 150,295 M 110,275 L 105,290 M 70,265 L 60,280 M 35,230 L 20,240 M 25,190 L 10,195 M 25,110 L 10,105 M 35,70 L 20,60" stroke="#2b160a" stroke-width="8" stroke-linecap="round"/>
+
+      <!-- Corps principal (Beige) -->
+      <path d="M 150,55 C 95,55 60,90 60,150 C 60,210 95,245 150,245 C 205,245 240,210 240,150 C 240,90 205,55 150,55 Z" fill="#fffbf2" stroke="#2b160a" stroke-width="7"/>
+
+      <!-- Oreilles -->
+      <path d="M 80,115 C 68,100 85,90 92,108 Z" fill="#fffbf2" stroke="#2b160a" stroke-width="5"/>
+      <path d="M 220,115 C 232,100 215,90 208,108 Z" fill="#fffbf2" stroke="#2b160a" stroke-width="5"/>
+
+      <!-- Joues roses -->
+      <ellipse cx="105" cy="170" rx="14" ry="8" fill="#fca8a8" opacity="0.7"/>
+      <ellipse cx="195" cy="170" rx="14" ry="8" fill="#fca8a8" opacity="0.7"/>
+
+      <!-- Yeux Kawaii -->
+      <ellipse cx="125" cy="145" rx="10" ry="13" fill="#2b160a"/>
+      <circle cx="122" cy="140" r="4" fill="#ffffff"/>
+      <ellipse cx="175" cy="145" rx="10" ry="13" fill="#2b160a"/>
+      <circle cx="172" cy="140" r="4" fill="#ffffff"/>
+
+      <!-- Nez et bouche -->
+      <ellipse cx="150" cy="158" rx="8" ry="6" fill="#2b160a"/>
+      <circle cx="148" cy="156" r="2" fill="#ffffff"/>
+
+      <!-- Pattes supérieures -->
+      <path d="M 105,185 C 95,195 110,210 118,198 C 122,190 115,180 105,185 Z" fill="#fffbf2" stroke="#2b160a" stroke-width="5"/>
+      <path d="M 195,185 C 205,195 190,210 182,198 C 178,190 185,180 195,185 Z" fill="#fffbf2" stroke="#2b160a" stroke-width="5"/>
+
+      <!-- Pattes inférieures (avec coussinets) -->
+      <ellipse cx="115" cy="225" rx="16" ry="12" fill="#fffbf2" stroke="#2b160a" stroke-width="5"/>
+      <ellipse cx="115" cy="227" rx="8" ry="6" fill="#fca8a8"/>
+
+      <ellipse cx="185" cy="225" rx="16" ry="12" fill="#fffbf2" stroke="#2b160a" stroke-width="5"/>
+      <ellipse cx="185" cy="227" rx="8" ry="6" fill="#fca8a8"/>
+    </svg>
   </div>
 
   <div class="card-overlay" id="cardOverlay">
