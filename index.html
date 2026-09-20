@@ -111,7 +111,7 @@
     #bulb3 { bottom: 15%; left: 12%; }
     #bulb4 { bottom: 22%; right: 8%; }
 
-    /* --- MINI-JEU: Cadeaux Volants --- */
+    /* --- MINI-JEU: Éléments Volants --- */
     .gift-item {
       position: absolute;
       font-size: 45px;
@@ -130,6 +130,20 @@
       0% { transform: translateY(110vh) rotate(0deg); }
       50% { transform: translateY(50vh) rotate(180deg); }
       100% { transform: translateY(-20vh) rotate(360deg); }
+    }
+
+    /* Animation d'erreur pour les faux cadeaux */
+    @keyframes wrongItem {
+      0% { transform: scale(1) rotate(0deg); }
+      20% { transform: scale(1.2) rotate(-15deg); }
+      40% { transform: scale(1.2) rotate(15deg); }
+      60% { transform: scale(0.8) rotate(-10deg); }
+      100% { transform: scale(0); opacity: 0; }
+    }
+
+    .gift-item.wrong {
+      animation: wrongItem 0.4s forwards !important;
+      pointer-events: none;
     }
 
     /* --- Titres --- */
@@ -163,8 +177,8 @@
       color: #8c5a43;
     }
 
-    /* --- Arrière-plan Étoiles --- */
-    .bg-sparkles {
+    /* --- Arrière-plan Cœurs Animés (Graphiques/SVG) --- */
+    .bg-hearts {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
       overflow: hidden;
@@ -174,23 +188,60 @@
       transition: opacity 1s ease;
     }
 
-    body.light-on .bg-sparkles {
+    body.light-on .bg-hearts {
       opacity: 1;
     }
 
-    .sparkle {
+    /* Cœur graphique dessiné en CSS */
+    .animated-heart {
       position: absolute;
       bottom: -10%;
-      user-select: none;
-      animation: floatSparkle linear infinite;
-      filter: drop-shadow(0 0 6px rgba(255, 215, 0, 0.6));
+      width: 20px;
+      height: 20px;
+      background-color: #ff758f;
+      transform: rotate(-45deg);
+      filter: drop-shadow(0 0 6px rgba(255, 117, 143, 0.4));
+      animation: floatUp 8s linear infinite, pulseHeart 1.2s infinite alternate ease-in-out;
     }
 
-    @keyframes floatSparkle {
-      0% { transform: translateY(0) scale(0.5) rotate(0deg); opacity: 0; }
-      20% { opacity: 0.9; }
-      80% { opacity: 0.8; }
-      100% { transform: translateY(-115vh) scale(1.3) rotate(180deg); opacity: 0; }
+    .animated-heart::before,
+    .animated-heart::after {
+      content: "";
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: #ff758f;
+      border-radius: 50%;
+    }
+
+    .animated-heart::before {
+      top: -10px;
+      left: 0;
+    }
+
+    .animated-heart::after {
+      left: 10px;
+      top: 0;
+    }
+
+    /* Animation d'envol des cœurs */
+    @keyframes floatUp {
+      0% {
+        transform: translateY(0) rotate(-45deg) scale(0.6);
+        opacity: 0;
+      }
+      20% { opacity: 0.7; }
+      80% { opacity: 0.6; }
+      100% {
+        transform: translateY(-115vh) rotate(-25deg) scale(1.1);
+        opacity: 0;
+      }
+    }
+
+    /* Animation de battement de cœur */
+    @keyframes pulseHeart {
+      0% { filter: drop-shadow(0 0 4px rgba(255, 117, 143, 0.4)); }
+      100% { filter: drop-shadow(0 0 10px rgba(255, 117, 143, 0.8)); }
     }
 
     /* --- Grand Gâteau --- */
@@ -393,8 +444,8 @@
   <!-- Conteneur pour les Cadeaux Volants -->
   <div id="giftsContainer"></div>
 
-  <!-- Étincelles -->
-  <div class="bg-sparkles" id="sparklesContainer"></div>
+  <!-- Cœurs Animés en arrière-plan -->
+  <div class="bg-hearts" id="heartsContainer"></div>
 
   <h1 id="mainTitle">Oups, il fait noir ! 🕯️</h1>
   <div class="hint-text" id="hintText">Passe la lampe de poche pour chercher les 4 ampoules ! (<span id="countText">0</span>/4)</div>
@@ -580,7 +631,6 @@
               document.body.classList.add('light-on');
               bulbs.forEach(b => b.style.display = 'none');
               
-              // Passage au Mini-Jeu des Cadeaux
               startGiftGame();
             }, 500);
           }
@@ -591,53 +641,65 @@
       bulb.addEventListener('touchstart', handleLightUp);
     });
 
-    // --- MINI-JEU : Attraper les cadeaux ---
+    // --- MINI-JEU : Attraper SEULEMENT les VRAIS cadeaux 🎁 ---
     let giftsCaught = 0;
     const totalGiftsNeeded = 3;
     let giftInterval;
 
     function startGiftGame() {
       mainTitle.innerText = "Chasse aux Cadeaux ! 🎁";
-      hintText.innerHTML = `Attrape <b><span id="giftCount">0</span>/${totalGiftsNeeded}</b> cadeaux volants !`;
+      hintText.innerHTML = `Attrape <b><span id="giftCount">0</span>/${totalGiftsNeeded}</b> VRAIS cadeaux 🎁 (attention aux pièges !)`;
 
       if (typeof confetti === 'function') {
         confetti({ particleCount: 40, spread: 50, origin: { y: 0.5 } });
       }
 
-      giftInterval = setInterval(spawnGift, 800);
+      giftInterval = setInterval(spawnItem, 650);
     }
 
-    function spawnGift() {
+    function spawnItem() {
       if (giftsCaught >= totalGiftsNeeded) return;
 
-      const gift = document.createElement('div');
-      gift.classList.add('gift-item');
-      gift.innerText = ['🎁', '🎈', '🎀', '🎉'][Math.floor(Math.random() * 4)];
-      gift.style.left = (Math.random() * 80 + 10) + 'vw';
-      gift.style.animationDuration = (Math.random() * 2 + 3) + 's';
+      const item = document.createElement('div');
+      item.classList.add('gift-item');
+      
+      // Liste des éléments : 🎁 = Vrai cadeau, 🎈 🎀 🎉 💥 = Pièges
+      const itemsList = ['🎁', '🎁', '🎈', '🎀', '🎉', '💥'];
+      const selectedSymbol = itemsList[Math.floor(Math.random() * itemsList.length)];
+      
+      item.innerText = selectedSymbol;
+      item.style.left = (Math.random() * 80 + 10) + 'vw';
+      item.style.animationDuration = (Math.random() * 2 + 3) + 's';
 
-      gift.addEventListener('click', () => {
-        giftsCaught++;
-        document.getElementById('giftCount').innerText = giftsCaught;
+      item.addEventListener('click', () => {
+        if (selectedSymbol === '🎁') {
+          // --- VRAI CADEAU 🎁 ---
+          giftsCaught++;
+          document.getElementById('giftCount').innerText = giftsCaught;
 
-        if (typeof confetti === 'function') {
-          confetti({ particleCount: 25, spread: 40, origin: { x: gift.offsetLeft / window.innerWidth, y: gift.offsetTop / window.innerHeight } });
-        }
+          if (typeof confetti === 'function') {
+            confetti({ particleCount: 25, spread: 40, origin: { x: item.offsetLeft / window.innerWidth, y: item.offsetTop / window.innerHeight } });
+          }
 
-        gift.remove();
+          item.remove();
 
-        if (giftsCaught >= totalGiftsNeeded) {
-          clearInterval(giftInterval);
-          document.querySelectorAll('.gift-item').forEach(g => g.remove());
-          
-          setTimeout(showCakeStep, 600);
+          if (giftsCaught >= totalGiftsNeeded) {
+            clearInterval(giftInterval);
+            document.querySelectorAll('.gift-item').forEach(g => g.remove());
+            
+            setTimeout(showCakeStep, 600);
+          }
+        } else {
+          // --- PIÈGE 🎈 🎀 🎉 💥 ---
+          item.classList.add('wrong');
+          setTimeout(() => { item.remove(); }, 400);
         }
       });
 
-      giftsContainer.appendChild(gift);
+      giftsContainer.appendChild(item);
 
-      // Auto-suppression si sorti de l'écran
-      setTimeout(() => { gift.remove(); }, 5000);
+      // Auto-suppression
+      setTimeout(() => { if(item.parentNode) item.remove(); }, 5000);
     }
 
     function showCakeStep() {
@@ -650,22 +712,32 @@
       }
     }
 
-    // Étincelles de fond
-    const sparklesContainer = document.getElementById('sparklesContainer');
-    const sparkleSymbols = ['✨', '⭐', '🌟', '✦', '✧'];
+    // --- Génération des Cœurs CSS Animés en Arrière-plan ---
+    const heartsContainer = document.getElementById('heartsContainer');
+    const heartColors = ['#ff758f', '#ff8fa3', '#ff477e', '#f72585', '#ffb7c5'];
 
-    function createSparkle() {
+    function createAnimatedHeart() {
       if (!document.body.classList.contains('light-on')) return;
-      const sparkle = document.createElement('div');
-      sparkle.classList.add('sparkle');
-      sparkle.innerText = sparkleSymbols[Math.floor(Math.random() * sparkleSymbols.length)];
-      sparkle.style.left = Math.random() * 100 + 'vw';
-      sparkle.style.fontSize = (Math.random() * 16 + 12) + 'px';
-      sparkle.style.animationDuration = (Math.random() * 4 + 4) + 's';
-      sparklesContainer.appendChild(sparkle);
-      setTimeout(() => { sparkle.remove(); }, 8000);
+      
+      const heart = document.createElement('div');
+      heart.classList.add('animated-heart');
+      
+      // Position et couleurs aléatoires
+      const randomColor = heartColors[Math.floor(Math.random() * heartColors.length)];
+      const randomSize = Math.random() * 10 + 12; // entre 12px et 22px
+      
+      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.width = randomSize + 'px';
+      heart.style.height = randomSize + 'px';
+      heart.style.backgroundColor = randomColor;
+      heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
+      
+      heartsContainer.appendChild(heart);
+      
+      setTimeout(() => { heart.remove(); }, 10000);
     }
-    setInterval(createSparkle, 350);
+
+    setInterval(createAnimatedHeart, 700);
 
     // --- Bougies ---
     const flames = document.querySelectorAll('.flame');
