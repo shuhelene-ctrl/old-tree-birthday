@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Joyeux Anniversaire !</title>
+  <style>
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background: #fcece4;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      overflow: hidden;
+    }
+
+    h1 {
+      color: #7c402b;
+      font-size: 26px;
+      margin-bottom: 8px;
+      text-align: center;
+    }
+
+    .hint {
+      color: #9c5c43;
+      font-size: 14px;
+      margin-bottom: 25px;
+      animation: pulse 1.5s infinite alternate;
+    }
+
+    /* --- Hérisson Style Illustration (Rond & Assis) --- */
+    .hedgehog-container {
+      position: relative;
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .hedgehog-container:hover {
+      transform: scale(1.05) rotate(2deg);
+    }
+
+    .hedgehog {
+      position: relative;
+      width: 220px;
+      height: 230px;
+      animation: breathe 3s ease-in-out infinite alternate;
+    }
+
+    /* Piquants Extérieurs (Forme Ovale/Ronde) */
+    .spikes-outer {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 220px;
+      height: 230px;
+      background: #5a382c;
+      border-radius: 50% 50% 45% 45%;
+      border: 4px solid #2b1810;
+      box-shadow: inset 0 0 20px #3d2319;
+      /* Effet de piquants stylisés */
+      clip-path: polygon(
+        50% 0%, 58% 3%, 65% 0%, 72% 5%, 80% 3%, 86% 10%, 93% 10%, 96% 18%, 100% 25%, 
+        96% 33%, 100% 42%, 95% 50%, 99% 60%, 93% 68%, 97% 77%, 89% 83%, 90% 92%, 
+        80% 94%, 75% 100%, 65% 97%, 56% 100%, 48% 97%, 38% 100%, 28% 95%, 22% 98%, 
+        12% 91%, 13% 82%, 4% 75%, 8% 66%, 1% 57%, 7% 48%, 1% 38%, 6% 29%, 1% 20%, 
+        10% 14%, 15% 5%, 25% 6%, 33% 1%, 42% 4%
+      );
+    }
+
+    .spikes-inner {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      width: 200px;
+      height: 210px;
+      background: #845543;
+      border-radius: 50%;
+      z-index: 1;
+    }
+
+    /* Ventre / Visage Beige */
+    .belly {
+      position: absolute;
+      top: 22px;
+      left: 25px;
+      width: 150px;
+      height: 175px;
+      background: #fff0dd;
+      border-radius: 50% 50% 45% 45%;
+      border: 3.5px solid #2b1810;
+      z-index: 2;
+    }
+
+    /* Oreilles */
+    .ear {
+      position: absolute;
+      top: 30px;
+      width: 32px;
+      height: 38px;
+      background: #fff0dd;
+      border: 3.5px solid #2b1810;
+      border-radius: 50%;
+      z-index: 3;
+    }
+
+    .ear.left { left: 15px; transform: rotate(-15deg); }
+    .ear.right { right: 40px; transform: rotate(15deg); }
+
+    .ear-inner {
+      position: absolute;
+      top: 6px;
+      left: 5px;
+      width: 15px;
+      height: 20px;
+      background: #e8b0a2;
+      border-radius: 50%;
+    }
+
+    /* Yeux */
+    .eye {
+      position: absolute;
+      top: 75px;
+      width: 18px;
+      height: 22px;
+      background: #2b1810;
+      border-radius: 50%;
+      z-index: 4;
+    }
+
+    .eye.left { left: 55px; }
+    .eye.right { left: 102px; }
+
+    .eye::after {
+      content: '';
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 6px;
+      height: 6px;
+      background: #fff;
+      border-radius: 50%;
+    }
+
+    /* Museau / Nez */
+    .snout {
+      position: absolute;
+      top: 85px;
+      left: 62px;
+      width: 50px;
+      height: 35px;
+      z-index: 4;
+      text-align: center;
+    }
+
+    .nose {
+      width: 22px;
+      height: 16px;
+      background: #2b1810;
+      border-radius: 50% 50% 40% 40%;
+      margin: 0 auto;
+    }
+
+    .mouth {
+      width: 16px;
+      height: 8px;
+      border-bottom: 3px solid #2b1810;
+      border-radius: 0 0 10px 10px;
+      margin: 2px auto 0;
+    }
+
+    /* Joues Rosées */
+    .blush {
+      position: absolute;
+      top: 95px;
+      width: 18px;
+      height: 10px;
+      background: #f4b2a3;
+      border-radius: 50%;
+      z-index: 4;
+      opacity: 0.7;
+    }
+
+    .blush.left { left: 42px; }
+    .blush.right { left: 115px; }
+
+    /* Pattes Supérieures */
+    .paws-top {
+      position: absolute;
+      top: 125px;
+      left: 50px;
+      width: 75px;
+      display: flex;
+      justify-content: space-between;
+      z-index: 5;
+    }
+
+    .paw-hand {
+      width: 22px;
+      height: 18px;
+      background: #f2d4c2;
+      border: 3px solid #2b1810;
+      border-radius: 12px;
+    }
+
+    /* Pattes Inférieures (Coussinets du bas) */
+    .paws-bottom {
+      position: absolute;
+      top: 148px;
+      left: 45px;
+      width: 85px;
+      display: flex;
+      justify-content: space-between;
+      z-index: 5;
+    }
+
+    .paw-foot {
+      width: 28px;
+      height: 36px;
+      background: #f2d4c2;
+      border: 3px solid #2b1810;
+      border-radius: 16px 16px 12px 12px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-end;
+      padding-bottom: 4px;
+    }
+
+    .pad {
+      width: 12px;
+      height: 10px;
+      background: #e8b0a2;
+      border-radius: 50%;
+    }
+
+    /* --- Carte Pop-up --- */
+    .card-overlay {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      background: rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(3px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.4s ease;
+      z-index: 10;
+    }
+
+    .card-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .card {
+      width: min(90vw, 420px);
+      background: #ffffff;
+      border-radius: 15px;
+      padding: 25px;
+      box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+      border: 3px solid #d49a89;
+      text-align: center;
+      transform: translateY(20px);
+      transition: transform 0.4s ease;
+    }
+
+    .card-overlay.active .card {
+      transform: translateY(0);
+    }
+
+    .editable-text {
+      outline: none;
+      border: 1px dashed #d49a89;
+      border-radius: 8px;
+      padding: 15px;
+      min-height: 120px;
+      background: #fffbf7;
+      color: #5a382c;
+      font-size: 15px;
+      line-height: 1.5;
+      text-align: left;
+      margin-top: 15px;
+    }
+
+    .close-btn {
+      margin-top: 20px;
+      padding: 8px 22px;
+      background: #845543;
+      color: white;
+      border: none;
+      border-radius: 20px;
+      cursor: pointer;
+      font-weight: bold;
+    }
+
+    @keyframes breathe {
+      from { transform: scale(1); }
+      to { transform: scale(1.02); }
+    }
+
+    @keyframes pulse {
+      from { transform: scale(1); opacity: 0.8; }
+      to { transform: scale(1.05); opacity: 1; }
+    }
+  </style>
+</head>
+<body>
+
+  <h1>Un petit message pour toi !</h1>
+  <div class="hint">🦔 Clique sur le hérisson 💌</div>
+
+  <div class="hedgehog-container" id="hedgehog">
+    <div class="hedgehog">
+      <div class="spikes-outer"></div>
+      <div class="spikes-inner"></div>
+      <div class="ear left"><div class="ear-inner"></div></div>
+      <div class="ear right"><div class="ear-inner"></div></div>
+      
+      <div class="belly">
+        <div class="eye left"></div>
+        <div class="eye right"></div>
+        <div class="blush left"></div>
+        <div class="blush right"></div>
+        <div class="snout">
+          <div class="nose"></div>
+          <div class="mouth"></div>
+        </div>
+        <div class="paws-top">
+          <div class="paw-hand"></div>
+          <div class="paw-hand"></div>
+        </div>
+        <div class="paws-bottom">
+          <div class="paw-foot"><div class="pad"></div></div>
+          <div class="paw-foot"><div class="pad"></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-overlay" id="cardOverlay">
+    <div class="card">
+      <h2 style="color: #7c402b; margin-top: 0;">🎉 Joyeux Anniversaire ! 🎂</h2>
+      <p style="font-size: 12px; color: #9c5c43;">(Clique ci-dessous pour rédiger ton message)</p>
+      
+      <div class="editable-text" contenteditable="true">
+        Écris ton message ici... ❤️
+      </div>
+
+      <button class="close-btn" id="closeBtn">Fermer la carte</button>
+    </div>
+  </div>
+
+  <script>
+    const hedgehog = document.getElementById('hedgehog');
+    const cardOverlay = document.getElementById('cardOverlay');
+    const closeBtn = document.getElementById('closeBtn');
+
+    hedgehog.addEventListener('click', () => {
+      cardOverlay.classList.add('active');
+    });
+
+    closeBtn.addEventListener('click', () => {
+      cardOverlay.classList.remove('active');
+    });
+
+    cardOverlay.addEventListener('click', (e) => {
+      if (e.target === cardOverlay) {
+        cardOverlay.classList.remove('active');
+      }
+    });
+  </script>
+</body>
+</html>
