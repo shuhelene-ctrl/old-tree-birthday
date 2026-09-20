@@ -420,8 +420,8 @@
   <!-- Cœurs Animés en arrière-plan -->
   <div class="bg-hearts" id="heartsContainer"></div>
 
-  <h1 id="mainTitle">Oups, il fait noir ! 🕯️</h1>
-  <div class="hint-text" id="hintText">Passe la lampe de poche pour chercher les 4 ampoules ! (<span id="countText">0</span>/4)</div>
+  <h1 id="mainTitle">Oups, it's dark ! 🕯️</h1>
+  <div class="hint-text" id="hintText"> Find the 4 lightbulbs ! (<span id="countText">0</span>/4)</div>
 
   <!-- Grand Gâteau -->
   <div class="cake-container" id="cakeContainer">
@@ -539,8 +539,7 @@
   <!-- Pop-up Carte -->
   <div class="card-overlay" id="cardOverlay">
     <div class="card">
-      <h2>🎉 Joyeux Anniversaire Mia ! 🎂</h2>
-      <div class="card-subtitle">(Clique dans l'encadré pour personnaliser ton texte)</div>
+      <h2>🎉 Happy Birthday Mia ! 🎂</h2>
       
       <div class="editable-text" contenteditable="true">
         Joyeux Anniversaire Mia ! 🎂<br><br>
@@ -676,8 +675,8 @@
     }
 
     function showCakeStep() {
-      mainTitle.innerText = "Fais un vœu Mia ! 🎂";
-      hintText.innerText = "Clique sur les bougies pour les souffler !";
+      mainTitle.innerText = "Make a wish Mia ! 🎂";
+      hintText.innerText = "Click on the candles to blow them out !";
       cakeContainer.classList.add('show');
 
       if (typeof confetti === 'function') {
