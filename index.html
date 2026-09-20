@@ -5,6 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Happy Birthday Mia !</title>
   <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+  
   <style>
     * { box-sizing: border-box; }
 
@@ -177,7 +178,7 @@
       color: #8c5a43;
     }
 
-    /* --- Arrière-plan Cœurs Animés (Graphiques/SVG) --- */
+    /* --- Arrière-plan Cœurs Animés (SVG Parfaits) --- */
     .bg-hearts {
       position: absolute;
       top: 0; left: 0; width: 100%; height: 100%;
@@ -192,56 +193,28 @@
       opacity: 1;
     }
 
-    /* Cœur graphique dessiné en CSS */
+    /* Cœur SVG parfait */
     .animated-heart {
       position: absolute;
       bottom: -10%;
-      width: 20px;
-      height: 20px;
-      background-color: #ff758f;
-      transform: rotate(-45deg);
-      filter: drop-shadow(0 0 6px rgba(255, 117, 143, 0.4));
-      animation: floatUp 8s linear infinite, pulseHeart 1.2s infinite alternate ease-in-out;
-    }
-
-    .animated-heart::before,
-    .animated-heart::after {
-      content: "";
-      position: absolute;
-      width: 20px;
-      height: 20px;
-      background-color: #ff758f;
-      border-radius: 50%;
-    }
-
-    .animated-heart::before {
-      top: -10px;
-      left: 0;
-    }
-
-    .animated-heart::after {
-      left: 10px;
-      top: 0;
+      width: 24px;
+      height: 24px;
+      animation: floatUp 8s linear infinite;
+      filter: drop-shadow(0 2px 6px rgba(255, 117, 143, 0.4));
     }
 
     /* Animation d'envol des cœurs */
     @keyframes floatUp {
       0% {
-        transform: translateY(0) rotate(-45deg) scale(0.6);
+        transform: translateY(0) scale(0.6) rotate(0deg);
         opacity: 0;
       }
-      20% { opacity: 0.7; }
-      80% { opacity: 0.6; }
+      20% { opacity: 0.8; }
+      80% { opacity: 0.7; }
       100% {
-        transform: translateY(-115vh) rotate(-25deg) scale(1.1);
+        transform: translateY(-115vh) scale(1.2) rotate(25deg);
         opacity: 0;
       }
-    }
-
-    /* Animation de battement de cœur */
-    @keyframes pulseHeart {
-      0% { filter: drop-shadow(0 0 4px rgba(255, 117, 143, 0.4)); }
-      100% { filter: drop-shadow(0 0 10px rgba(255, 117, 143, 0.8)); }
     }
 
     /* --- Grand Gâteau --- */
@@ -566,11 +539,11 @@
   <!-- Pop-up Carte -->
   <div class="card-overlay" id="cardOverlay">
     <div class="card">
-      <h2>🎉 Joyeux Anniversaire ! 🎂</h2>
+      <h2>🎉 Joyeux Anniversaire Mia ! 🎂</h2>
       <div class="card-subtitle">(Clique dans l'encadré pour personnaliser ton texte)</div>
       
       <div class="editable-text" contenteditable="true">
-        Joyeux Anniversaire ! 🎂<br><br>
+        Joyeux Anniversaire Mia ! 🎂<br><br>
         Que tous tes souhaits se réalisent en cette magnifique journée ! 🌳✨<br><br>
         Plein de bonheur et de surprises ! ✨
       </div>
@@ -703,7 +676,7 @@
     }
 
     function showCakeStep() {
-      mainTitle.innerText = "Fais un vœu ! 🎂";
+      mainTitle.innerText = "Fais un vœu Mia ! 🎂";
       hintText.innerText = "Clique sur les bougies pour les souffler !";
       cakeContainer.classList.add('show');
 
@@ -712,7 +685,7 @@
       }
     }
 
-    // --- Génération des Cœurs CSS Animés en Arrière-plan ---
+    // --- Génération des Cœurs SVG Animés en Arrière-plan ---
     const heartsContainer = document.getElementById('heartsContainer');
     const heartColors = ['#ff758f', '#ff8fa3', '#ff477e', '#f72585', '#ffb7c5'];
 
@@ -722,22 +695,27 @@
       const heart = document.createElement('div');
       heart.classList.add('animated-heart');
       
-      // Position et couleurs aléatoires
       const randomColor = heartColors[Math.floor(Math.random() * heartColors.length)];
-      const randomSize = Math.random() * 10 + 12; // entre 12px et 22px
+      const randomSize = Math.floor(Math.random() * 14) + 16; // taille entre 16px et 30px
       
-      heart.style.left = Math.random() * 100 + 'vw';
+      heart.style.left = Math.random() * 90 + 5 + 'vw';
       heart.style.width = randomSize + 'px';
       heart.style.height = randomSize + 'px';
-      heart.style.backgroundColor = randomColor;
       heart.style.animationDuration = (Math.random() * 4 + 6) + 's';
+      
+      // Forme vectorielle (SVG) d'un cœur parfait
+      heart.innerHTML = `
+        <svg viewBox="0 0 32 32" width="100%" height="100%" fill="${randomColor}">
+          <path d="M16,28.2 C15.4,27.7 4,17.9 4,11 C4,6.6 7.6,3 12,3 C14.6,3 16.9,4.2 18.3,6.2 C19.7,4.2 22,3 24.6,3 C29,3 32.6,6.6 32.6,11 C32.6,17.9 21.2,27.7 20.6,28.2 L18.3,30 L16,28.2 Z" />
+        </svg>
+      `;
       
       heartsContainer.appendChild(heart);
       
       setTimeout(() => { heart.remove(); }, 10000);
     }
 
-    setInterval(createAnimatedHeart, 700);
+    setInterval(createAnimatedHeart, 600);
 
     // --- Bougies ---
     const flames = document.querySelectorAll('.flame');
